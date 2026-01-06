@@ -2,7 +2,7 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Tabs } from "expo-router";
 import { Platform } from "react-native";
 
-export default function TabLayout() {
+export default function InnerTabsLayout() {
   return (
     <Tabs
       screenOptions={{
@@ -18,24 +18,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Inner Home",
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
           headerShown: false,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="inner-explore"
         options={{
-          title: "Explore",
+          title: "Inner Explore",
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="inner"
-        options={{
-          tabBarStyle: { display: "none", width: 0 },
-          headerShown: false,
-          href: null,
         }}
       />
     </Tabs>
