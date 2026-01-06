@@ -64,7 +64,13 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
           </Text>
         </View>
         <Image
-          source={{ uri: pokemonById?.sprites.other["official-artwork"].front_default || "" }}
+          source={{
+            uri:
+              pokemonById?.sprites.other["official-artwork"].front_default ||
+              pokemonById?.sprites.front_default ||
+              pokemonById?.sprites.other.showdown.front_default ||
+              "",
+          }}
           style={{
             height: 180,
           }}

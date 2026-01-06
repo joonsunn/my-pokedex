@@ -18,7 +18,7 @@ export default function PokemonById() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: pokemonById } = useGetPokemonById({ id: id || "" });
   const { data: pokemonByName } = useGetPokemonByName({ name: pokemonById?.name });
-  const { data: pokemonSpecies } = useGetPokemonSpeciesByName({ name: pokemonByName?.species.name });
+  const { data: pokemonSpecies } = useGetPokemonSpeciesByName({ name: pokemonByName?.name });
   const { data: pokemonForm } = useGetPokemonFormByName({ name: pokemonById?.name });
 
   const navigation = useNavigation();
@@ -46,7 +46,12 @@ export default function PokemonById() {
       <PokemonTypesRenderer types={pokemonById?.types} />
 
       <Image
-        source={{ uri: pokemonById?.sprites.other.showdown.front_default || "" }}
+        source={{
+          uri:
+            pokemonById?.sprites.other.showdown.front_default ||
+            pokemonById?.sprites.other["official-artwork"].front_default ||
+            "",
+        }}
         style={{
           height: 200,
           width: 200,

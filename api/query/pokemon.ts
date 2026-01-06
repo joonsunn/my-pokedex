@@ -32,7 +32,7 @@ export const useGetPokemonById = (args?: { id?: string }) => {
 export const useGetPokemonByName = (args?: { name?: string }) => {
   const { name } = args || {};
   const getPokemonByNameQuery = async () => {
-    const response = await axios.get<GetPokemonSpeciesResponse>(POKEMON_URL.getPokemonByName(name));
+    const response = await axios.get<GetPokemonResponse>(POKEMON_URL.getPokemonByName(name));
     return response.data;
   };
 
@@ -151,7 +151,7 @@ function getPokemonsBySearchCombineFunction(results: UseQueryResult<GetPokemonRe
 export function useGetPokemonsBySearch({ searchText }: { searchText?: string }) {
   const nameSearchResult = PokemonNames.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(searchText?.toLowerCase() || "")
-  ).slice(0, 10);
+  ).slice(0, 50);
 
   const getPokemonByNameQuery = async (name: string) => {
     const response = await axios.get<GetPokemonResponse>(POKEMON_URL.getPokemonByName(name));

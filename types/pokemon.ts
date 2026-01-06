@@ -25,6 +25,10 @@ export type GetPokemonResponse = {
     latest: string;
     legacy: string;
   };
+  species: {
+    name: string;
+    url: string;
+  };
   sprites: {
     back_default: string | null;
     back_female: string | null;
