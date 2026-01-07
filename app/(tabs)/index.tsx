@@ -1,8 +1,9 @@
 import { useGetPokemonsBySearch } from "@/api/query/pokemon";
 import { PokemonVerticalList } from "@/modules/pokemon/PokemonVerticalList";
+import { StyledSearchInput } from "@/modules/pokemon/styled-search-input";
 import { GetPokemonResponse } from "@/types/pokemon";
-import { useEffect, useRef, useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { useState } from "react";
+import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Home() {
@@ -31,60 +32,12 @@ export default function Home() {
           gap: 4,
         }}
       >
-        <View
-          style={{
-            borderWidth: 1,
-            borderStyle: "solid",
-            borderColor: "darkgrey",
-            borderRadius: 50,
-          }}
-        >
-          <DebouncedTextInput value={searchText} onChangeText={setSearchText} />
-        </View>
+        <StyledSearchInput searchText={searchText} setSearchText={setSearchText} />
         {searchText && !validPokemons.length ? (
           <Text style={{ color: "grey" }}>No pokemon found. Showing all pokemon.</Text>
         ) : null}
       </View>
       <PokemonVerticalList pokemons={validPokemons} />
     </View>
-  );
-}
-
-function DebouncedTextInput({
-  value,
-  onChangeText,
-  debounceMs = 500,
-  minLength = 3,
-}: {
-  value?: string | undefined;
-  onChangeText?: ((text: string) => void) | undefined;
-  debounceMs?: number;
-  minLength?: number;
-}) {
-  const [textValue, setTextValue] = useState<string | undefined>(value);
-  const timeoutId = useRef<NodeJS.Timeout | null | number>(null);
-
-  useEffect(() => {
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current);
-    }
-    if ((textValue && textValue?.length >= minLength) || !textValue) {
-      timeoutId.current = setTimeout(() => {
-        onChangeText && onChangeText(textValue || "");
-      }, debounceMs);
-    }
-  }, [textValue, debounceMs, onChangeText, minLength]);
-
-  return (
-    <TextInput
-      value={textValue}
-      onChangeText={(text) => setTextValue(text)}
-      placeholder="Search Pokemon"
-      placeholderTextColor="grey"
-      style={{
-        padding: 10,
-        fontSize: 18,
-      }}
-    />
   );
 }
