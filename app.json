@@ -21,7 +21,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.rntest"
+      "package": "com.anonymous.my-pokedex"
     },
     "web": {
       "output": "static",
