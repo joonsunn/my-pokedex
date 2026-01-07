@@ -1,6 +1,7 @@
-import { DebouncedTextInput } from "@/components/input/debounced-text-input";
+import { DebouncedTextInput, DebouncedTextInputRef } from "@/components/input/debounced-text-input";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useRef } from "react";
 import { Pressable, View } from "react-native";
 
 export function StyledSearchInput({
@@ -11,6 +12,14 @@ export function StyledSearchInput({
   setSearchText: (text: string) => void;
 }) {
   const iconColor = useThemeColor({}, "icon");
+
+  const debouncedTextInputRef = useRef<DebouncedTextInputRef>(null);
+
+  const handleReset = () => {
+    if (debouncedTextInputRef.current) {
+      debouncedTextInputRef.current.resetTextValue();
+    }
+  };
 
   return (
     <View
@@ -25,9 +34,9 @@ export function StyledSearchInput({
         paddingHorizontal: 18,
       }}
     >
-      <DebouncedTextInput value={searchText} onChangeText={setSearchText} />
+      <DebouncedTextInput value={searchText} onChangeText={setSearchText} ref={debouncedTextInputRef} />
       {searchText ? (
-        <Pressable onPress={() => setSearchText("")}>
+        <Pressable onPress={() => handleReset()}>
           <View
             style={{
               backgroundColor: "red",

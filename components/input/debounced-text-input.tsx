@@ -1,16 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useImperativeHandle, useRef, useState } from "react";
 import { TextInput } from "react-native";
+
+export type DebouncedTextInputRef = {
+  resetTextValue: () => void;
+};
 
 export function DebouncedTextInput({
   value,
   onChangeText,
   debounceMs = 500,
   minLength = 3,
+  ref,
 }: {
   value?: string | undefined;
   onChangeText?: ((text: string) => void) | undefined;
   debounceMs?: number;
   minLength?: number;
+  ref?: React.RefObject<DebouncedTextInputRef | null>;
 }) {
   const [textValue, setTextValue] = useState<string | undefined>(value);
   const timeoutId = useRef<NodeJS.Timeout | null | number>(null);
@@ -25,6 +31,14 @@ export function DebouncedTextInput({
       }, debounceMs);
     }
   }, [textValue, debounceMs, onChangeText, minLength]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      resetTextValue: () => setTextValue(""),
+    }),
+    []
+  );
 
   return (
     <TextInput
