@@ -12,3 +12,15 @@ npm run start
 ```
 
 If you face error `development build not installed on device`, then run either `npm run android` or `npm run ios`, depending on your target platform.
+
+## Build
+
+### Android
+
+To create an .apk file for sideloading onto Android devices:
+
+```zsh
+./gradlew assembleRelease
+```
+
+The build output will be located at `./android/app/build/apk/release`
