@@ -1,5 +1,5 @@
 {
-  "name": "my-pokedex",
+  "name": "my_pokedex",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {

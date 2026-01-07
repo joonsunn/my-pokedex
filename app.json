@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "My Pokedex",
-    "slug": "my-pokedex",
+    "slug": "my_pokedex",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.my-pokedex"
+      "bundleIdentifier": "com.anonymous.my_pokedex"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +21,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.my-pokedex"
+      "package": "com.anonymous.my_pokedex"
     },
     "web": {
       "output": "static",
