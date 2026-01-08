@@ -40,7 +40,7 @@ export function StyledSearchInput({
           <View
             style={{
               backgroundColor: "red",
-              opacity: 0.4,
+              opacity: 0.6,
               borderRadius: 100,
               padding: 6,
             }}
