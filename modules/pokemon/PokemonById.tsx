@@ -5,13 +5,15 @@ import {
   useGetPokemonSpeciesByName,
   useGetPokemonTypesInfo,
 } from "@/api/query/pokemon";
+import { BookmarkIcon } from "@/components/BookmarkIcon";
+import { useBookmarks } from "@/contexts/BookmarksContext";
 import { GetPokemonTypesResponse } from "@/types/pokemon";
 import { groupBy } from "@/utils/polyfill/groupBy";
 import { typeMultiplierAnalyzer } from "@/utils/typeMultiplierAnalyzer";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { PokemonTypesRenderer } from "./PokemonTypesRenderer";
 
 export default function PokemonById() {
@@ -20,8 +22,17 @@ export default function PokemonById() {
   const { data: pokemonByName } = useGetPokemonByName({ name: pokemonById?.name });
   const { data: pokemonSpecies } = useGetPokemonSpeciesByName({ name: pokemonByName?.name });
   const { data: pokemonForm } = useGetPokemonFormByName({ name: pokemonById?.name });
+  const { bookmarks, toggleBookmark } = useBookmarks();
 
   const navigation = useNavigation();
+
+  const isBookmarked = bookmarks.some((p: any) => p.id === pokemonById?.id);
+
+  const handleToggleBookmark = async () => {
+    if (pokemonById) {
+      await toggleBookmark(pokemonById);
+    }
+  };
 
   const nameToDisplay =
     pokemonForm?.names?.find((name) => name.language.name === "en")?.name ||
@@ -43,6 +54,9 @@ export default function PokemonById() {
         paddingTop: 10,
       }}
     >
+      <Pressable onPress={handleToggleBookmark} style={{ position: "absolute", top: 10, right: 10 }}>
+        <BookmarkIcon isBookmarked={isBookmarked} />
+      </Pressable>
       <PokemonTypesRenderer types={pokemonById?.types} />
 
       <Image

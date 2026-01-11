@@ -20,6 +20,8 @@ const MAPPING = {
   "chevron.right": "chevron-right",
   magnifyingglass: "search",
   xmark: "close",
+  star: "star-border",
+  "star.fill": "star",
 } as IconMapping;
 
 /**

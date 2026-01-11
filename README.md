@@ -20,6 +20,7 @@ If you face error `development build not installed on device`, then run either `
 To create an .apk file for sideloading onto Android devices:
 
 ```zsh
+cd android
 ./gradlew assembleRelease
 ```
 
