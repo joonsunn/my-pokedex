@@ -24,14 +24,22 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="bookmarks"
         options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Bookmarks",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="star.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="inner"
+        options={{
+          tabBarStyle: { display: "none", width: 0 },
+          headerShown: false,
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="explore"
         options={{
           tabBarStyle: { display: "none", width: 0 },
           headerShown: false,

@@ -4,6 +4,8 @@ import {
   useGetPokemonFormByName,
   useGetPokemonSpeciesById,
 } from "@/api/query/pokemon";
+import { BookmarkIcon } from "@/components/BookmarkIcon";
+import { useBookmarks } from "@/contexts/BookmarksContext";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
@@ -14,15 +16,23 @@ type PokemonInListRendererProps = {
 
 export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
   const { data: pokemonByName, isLoading } = useGetPokemonByName({ name: pokemon?.name });
-  // const { data: pokemonSpecies } = useGetPokemonSpeciesByName({ name: pokemonByName?.name });
   const { data: pokemonSpecies } = useGetPokemonSpeciesById({ id: pokemonByName?.id.toString() });
   const { data: pokemonById } = useGetPokemonById({ id: pokemonByName?.id.toString() });
   const { data: pokemonForm } = useGetPokemonFormByName({ name: pokemon?.name });
   const router = useRouter();
+  const { bookmarks, toggleBookmark } = useBookmarks();
 
   function handleClick() {
     router.push(`/pokemon/${pokemonById?.id}`);
   }
+
+  const isBookmarked = bookmarks.some((p: any) => p.id === pokemonById?.id);
+
+  const handleToggleBookmark = async () => {
+    if (pokemonById) {
+      await toggleBookmark(pokemonById);
+    }
+  };
 
   const nameToDisplay =
     pokemonForm?.names?.find((name) => name.language.name === "en")?.name ||
@@ -76,6 +86,9 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
           }}
           contentFit="contain"
         />
+        <Pressable onPress={handleToggleBookmark} style={{ position: "absolute", top: 10, right: 10 }}>
+          <BookmarkIcon isBookmarked={isBookmarked} />
+        </Pressable>
       </View>
     </Pressable>
   );
