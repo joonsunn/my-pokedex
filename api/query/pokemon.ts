@@ -149,9 +149,11 @@ function getPokemonsBySearchCombineFunction(results: UseQueryResult<GetPokemonRe
 }
 
 export function useGetPokemonsBySearch({ searchText }: { searchText?: string }) {
-  const nameSearchResult = PokemonNames.filter((pokemon) =>
-    pokemon.name.toLowerCase().includes(searchText?.toLowerCase() || "")
-  ).slice(0, 50);
+  const nameSearchResult = PokemonNames.filter((pokemon) => {
+    const data = pokemon.name.toLowerCase();
+    const splitSearch = searchText?.toLowerCase().split(/\W/) || [""];
+    return splitSearch.every((word) => data.includes(word));
+  }).slice(0, 50);
 
   const getPokemonByNameQuery = async (name: string) => {
     const response = await axios.get<GetPokemonResponse>(POKEMON_URL.getPokemonByName(name));

@@ -59,10 +59,11 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
           borderRadius: 36,
         }}
       />
-      <View style={{ zIndex: 1, paddingVertical: 12 }}>
+      <View style={{ zIndex: 1, paddingVertical: 12, gap: 12 }}>
         <View
           style={{
             alignItems: "center",
+            flexDirection: "column",
           }}
         >
           <Text
@@ -70,9 +71,19 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
               fontSize: 20,
             }}
           >
-            #{pokemonByName?.id} {nameToDisplay}
+            #{pokemonByName?.id}
+          </Text>
+          <Text
+            style={{
+              fontSize: 20,
+            }}
+          >
+            {nameToDisplay}
           </Text>
         </View>
+        <Pressable onPress={handleToggleBookmark} style={{ position: "absolute", top: 16, right: 16 }}>
+          <BookmarkIcon isBookmarked={isBookmarked} />
+        </Pressable>
         <Image
           source={{
             uri:
@@ -86,9 +97,6 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
           }}
           contentFit="contain"
         />
-        <Pressable onPress={handleToggleBookmark} style={{ position: "absolute", top: 10, right: 10 }}>
-          <BookmarkIcon isBookmarked={isBookmarked} />
-        </Pressable>
       </View>
     </Pressable>
   );
