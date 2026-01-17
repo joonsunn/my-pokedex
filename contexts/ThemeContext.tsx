@@ -8,7 +8,7 @@ export const ThemeContext = createContext<ThemeContextType | undefined>(undefine
 
 export const ThemeProvider = ({ children }: PropsWithChildren) => {
   const colorScheme = useColorScheme(); // 'light' | 'dark' | null
-  const [theme, setTheme] = useState(lightTheme);
+  const [theme, setTheme] = useState(darkTheme);
 
   useEffect(() => {
     // Load saved theme from AsyncStorage
