@@ -1,4 +1,5 @@
 import { useGetPokemonsBySearch } from "@/api/query/pokemon";
+import { ThemedView } from "@/components/themed-view";
 import { PokemonVerticalList } from "@/modules/pokemon/PokemonVerticalList";
 import { StyledSearchInput } from "@/modules/pokemon/styled-search-input";
 import { GetPokemonResponse } from "@/types/pokemon";
@@ -16,14 +17,15 @@ export default function Home() {
   } = useGetPokemonsBySearch({ searchText });
 
   const validPokemons = filteredPokemonList.filter(
-    (pokemon): pokemon is GetPokemonResponse => pokemon !== undefined
+    (pokemon): pokemon is GetPokemonResponse => pokemon !== undefined,
   ) as GetPokemonResponse[];
 
   return (
-    <View
+    <ThemedView
       style={{
         paddingTop: top,
         flex: 1,
+        gap: 16,
       }}
     >
       <View
@@ -38,6 +40,6 @@ export default function Home() {
         ) : null}
       </View>
       <PokemonVerticalList pokemons={validPokemons} />
-    </View>
+    </ThemedView>
   );
 }

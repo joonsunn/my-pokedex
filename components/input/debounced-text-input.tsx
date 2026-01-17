@@ -1,3 +1,4 @@
+import { useTheme } from "@/contexts/ThemeContext";
 import { useEffect, useImperativeHandle, useRef, useState } from "react";
 import { TextInput } from "react-native";
 
@@ -18,6 +19,7 @@ export function DebouncedTextInput({
   minLength?: number;
   ref?: React.RefObject<DebouncedTextInputRef | null>;
 }) {
+  const { theme } = useTheme();
   const [textValue, setTextValue] = useState<string | undefined>(value);
   const timeoutId = useRef<NodeJS.Timeout | null | number>(null);
 
@@ -37,7 +39,7 @@ export function DebouncedTextInput({
     () => ({
       resetTextValue: () => setTextValue(""),
     }),
-    []
+    [],
   );
 
   return (
@@ -50,6 +52,7 @@ export function DebouncedTextInput({
         padding: 10,
         fontSize: 18,
         flex: 1,
+        color: theme.colors.foreground,
       }}
     />
   );
