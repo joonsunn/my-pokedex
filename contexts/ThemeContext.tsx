@@ -14,25 +14,20 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
     // Load saved theme from AsyncStorage
     const loadSavedTheme = async () => {
       const savedTheme = await getSavedTheme();
-      console.log({ savedTheme });
       if (savedTheme) {
         setTheme(savedTheme === "dark" ? darkTheme : lightTheme);
+      } else {
+        const newTheme = colorScheme === "dark" ? darkTheme : lightTheme;
+        setTheme(newTheme);
       }
     };
     loadSavedTheme();
-  }, []);
-
-  useEffect(() => {
-    // Auto-switch based on system preference
-    const newTheme = colorScheme === "dark" ? darkTheme : lightTheme;
-    setTheme(newTheme);
   }, [colorScheme]);
 
   // Manual toggle function (optional)
   const toggleTheme = async () => {
     setTheme((prev) => (prev === lightTheme ? darkTheme : lightTheme));
-    const savedTheme = await getSavedTheme();
-    setSavedTheme(savedTheme === "dark" ? "light" : "dark");
+    setSavedTheme(theme === darkTheme ? "light" : "dark");
   };
 
   return <ThemeContext value={{ theme, toggleTheme, isDark: theme === darkTheme }}>{children}</ThemeContext>;

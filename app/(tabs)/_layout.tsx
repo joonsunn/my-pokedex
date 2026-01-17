@@ -21,6 +21,7 @@ export default function TabLayout() {
             backgroundColor: theme.colors.background,
           },
           headerTintColor: theme.colors.foreground,
+          tabBarActiveTintColor: theme.colors.primary,
         }}
       >
         <Tabs.Screen
