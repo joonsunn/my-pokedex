@@ -6,6 +6,7 @@ import {
 } from "@/api/query/pokemon";
 import { BookmarkIcon } from "@/components/BookmarkIcon";
 import { useBookmarks } from "@/contexts/BookmarksContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
@@ -21,6 +22,7 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
   const { data: pokemonForm } = useGetPokemonFormByName({ name: pokemon?.name });
   const router = useRouter();
   const { bookmarks, toggleBookmark } = useBookmarks();
+  const { theme } = useTheme();
 
   function handleClick() {
     router.push(`/pokemon/${pokemonById?.id}`);
@@ -69,6 +71,7 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
           <Text
             style={{
               fontSize: 20,
+              color: theme.colors.foreground,
             }}
           >
             #{pokemonByName?.id}
@@ -76,6 +79,7 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
           <Text
             style={{
               fontSize: 20,
+              color: theme.colors.foreground,
             }}
           >
             {nameToDisplay}

@@ -6,6 +6,8 @@ import {
   useGetPokemonTypesInfo,
 } from "@/api/query/pokemon";
 import { BookmarkIcon } from "@/components/BookmarkIcon";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 import { useBookmarks } from "@/contexts/BookmarksContext";
 import { GetPokemonTypesResponse } from "@/types/pokemon";
 import { groupBy } from "@/utils/polyfill/groupBy";
@@ -13,7 +15,7 @@ import { typeMultiplierAnalyzer } from "@/utils/typeMultiplierAnalyzer";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { PokemonTypesRenderer } from "./PokemonTypesRenderer";
 
 export default function PokemonById() {
@@ -46,34 +48,40 @@ export default function PokemonById() {
   }, [nameToDisplay, navigation]);
 
   return (
-    <View
+    <ThemedView
       style={{
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 12,
-        paddingTop: 10,
+        height: "100%",
       }}
     >
-      <Pressable onPress={handleToggleBookmark} style={{ position: "absolute", top: 10, right: 10 }}>
-        <BookmarkIcon isBookmarked={isBookmarked} />
-      </Pressable>
-      <PokemonTypesRenderer types={pokemonById?.types} />
-
-      <Image
-        source={{
-          uri:
-            pokemonById?.sprites.other.showdown.front_default ||
-            pokemonById?.sprites.other["official-artwork"].front_default ||
-            "",
-        }}
+      <View
         style={{
-          height: 200,
-          width: 200,
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 12,
+          paddingTop: 10,
         }}
-        contentFit="contain"
-      />
-      <WeaknessChartRenderer types={pokemonById?.types} />
-    </View>
+      >
+        <Pressable onPress={handleToggleBookmark} style={{ position: "absolute", top: 10, right: 10 }}>
+          <BookmarkIcon isBookmarked={isBookmarked} />
+        </Pressable>
+        <PokemonTypesRenderer types={pokemonById?.types} />
+
+        <Image
+          source={{
+            uri:
+              pokemonById?.sprites.other.showdown.front_default ||
+              pokemonById?.sprites.other["official-artwork"].front_default ||
+              "",
+          }}
+          style={{
+            height: 200,
+            width: 200,
+          }}
+          contentFit="contain"
+        />
+        <WeaknessChartRenderer types={pokemonById?.types} />
+      </View>
+    </ThemedView>
   );
 }
 
@@ -114,7 +122,7 @@ function WeaknessChartRenderer({ types }: { types?: GetPokemonTypesResponse[] })
           width: "auto",
         }}
       >
-        <Text
+        <ThemedText
           style={{
             margin: "auto",
             width: "auto",
@@ -123,7 +131,7 @@ function WeaknessChartRenderer({ types }: { types?: GetPokemonTypesResponse[] })
           }}
         >
           Attacker Analysis
-        </Text>
+        </ThemedText>
       </View>
       <View
         style={{
@@ -134,7 +142,7 @@ function WeaknessChartRenderer({ types }: { types?: GetPokemonTypesResponse[] })
           .filter((group) => group !== "Normal Damage")
           .map((group) => (
             <View key={group} style={{ alignItems: "flex-start", gap: 8 }}>
-              <Text
+              <ThemedText
                 style={{
                   fontSize: 16,
                   fontWeight: "bold",
@@ -142,7 +150,7 @@ function WeaknessChartRenderer({ types }: { types?: GetPokemonTypesResponse[] })
                 }}
               >
                 {group}:
-              </Text>
+              </ThemedText>
 
               <PokemonTypesRenderer
                 types={damageMultiplier[group as keyof typeof damageMultiplier].map((type, index) => ({

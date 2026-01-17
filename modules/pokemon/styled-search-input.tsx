@@ -1,6 +1,6 @@
 import { DebouncedTextInput, DebouncedTextInputRef } from "@/components/input/debounced-text-input";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useRef } from "react";
 import { Pressable, View } from "react-native";
 
@@ -11,7 +11,7 @@ export function StyledSearchInput({
   searchText: string;
   setSearchText: (text: string) => void;
 }) {
-  const iconColor = useThemeColor({}, "icon");
+  const { theme } = useTheme();
 
   const debouncedTextInputRef = useRef<DebouncedTextInputRef>(null);
 
@@ -39,17 +39,17 @@ export function StyledSearchInput({
         <Pressable onPress={() => handleReset()}>
           <View
             style={{
-              backgroundColor: "red",
+              backgroundColor: theme.colors.error,
               opacity: 0.6,
               borderRadius: 100,
               padding: 6,
             }}
           >
-            <IconSymbol name={"xmark"} color={"white"} size={14} />
+            <IconSymbol name={"xmark"} color={theme.colors.foreground} size={14} />
           </View>
         </Pressable>
       ) : (
-        <IconSymbol name={"magnifyingglass"} color={iconColor} />
+        <IconSymbol name={"magnifyingglass"} color={theme.colors.foreground} />
       )}
     </View>
   );
