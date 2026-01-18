@@ -1,8 +1,9 @@
 import { TanstackQueryClientProvider } from "@/api/TanstackQueryClientProvider";
 import { BookmarksProvider } from "@/contexts/BookmarksContext";
-import { SettingsContextProvider } from "@/contexts/SettingsContext";
+import { SettingsContextProvider, useAppSettings } from "@/contexts/SettingsContext";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 import { Stack } from "expo-router";
+import { ReducedMotionConfig, ReduceMotion } from "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RootLayout() {
@@ -23,29 +24,33 @@ export default function RootLayout() {
 
 function ThemedStack() {
   const { theme } = useTheme();
+  const { forceAnimations } = useAppSettings();
 
   return (
-    <Stack
-      screenOptions={{
-        headerBackButtonDisplayMode: "minimal",
-        animation: "slide_from_right",
-      }}
-    >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="profile"
-        options={{ presentation: "formSheet", title: "Profile", sheetAllowedDetents: [0.7, 1.0] }}
-      />
-      <Stack.Screen
-        name="pokemon/[id]"
-        options={{
-          headerTitleAlign: "center",
-          headerStyle: {
-            backgroundColor: theme.colors.background,
-          },
-          headerTintColor: theme.colors.foreground,
+    <>
+      {forceAnimations ? <ReducedMotionConfig mode={ReduceMotion.Never} /> : null}
+      <Stack
+        screenOptions={{
+          headerBackButtonDisplayMode: "minimal",
+          animation: "slide_from_right",
         }}
-      />
-    </Stack>
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="profile"
+          options={{ presentation: "formSheet", title: "Profile", sheetAllowedDetents: [0.7, 1.0] }}
+        />
+        <Stack.Screen
+          name="pokemon/[id]"
+          options={{
+            headerTitleAlign: "center",
+            headerStyle: {
+              backgroundColor: theme.colors.background,
+            },
+            headerTintColor: theme.colors.foreground,
+          }}
+        />
+      </Stack>
+    </>
   );
 }
