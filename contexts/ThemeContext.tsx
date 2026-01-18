@@ -36,7 +36,7 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
 export const useTheme = () => {
   const theme = useContext(ThemeContext);
   if (!theme) {
-    throw Error(`useTheme must be used within a ThemeProvider`);
+    throw new Error(`useTheme must be used within a ThemeProvider`);
   }
   return theme;
 };

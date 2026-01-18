@@ -3,22 +3,23 @@ import {
   useGetPokemonByName,
   useGetPokemonFormByName,
   useGetPokemonSpeciesByName,
-  useGetPokemonTypesInfo,
 } from "@/api/query/pokemon";
 import { BookmarkIcon } from "@/components/BookmarkIcon";
-import { ThemedText } from "@/components/themed-text";
+import { ScannerLine } from "@/components/scanner-line";
 import { ThemedView } from "@/components/themed-view";
 import { useBookmarks } from "@/contexts/BookmarksContext";
-import { GetPokemonTypesResponse } from "@/types/pokemon";
-import { groupBy } from "@/utils/polyfill/groupBy";
-import { typeMultiplierAnalyzer } from "@/utils/typeMultiplierAnalyzer";
+import { useAppSettings } from "@/contexts/SettingsContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect } from "react";
-import { Pressable, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { PokemonTypesRenderer } from "./PokemonTypesRenderer";
+import { WeaknessChartRenderer } from "./WeaknessChartRenderer";
 
 export default function PokemonById() {
+  const { theme } = useTheme();
+  const { enableScanner } = useAppSettings();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: pokemonById } = useGetPokemonById({ id: id || "" });
   const { data: pokemonByName } = useGetPokemonByName({ name: pokemonById?.name });
@@ -65,102 +66,46 @@ export default function PokemonById() {
           <BookmarkIcon isBookmarked={isBookmarked} />
         </Pressable>
         <PokemonTypesRenderer types={pokemonById?.types} />
+        <View style={{ width: "100%", alignItems: "center" }}>
+          <View style={styles.container}>
+            <View style={styles.imageContainer}>
+              {enableScanner ? <ScannerLine scanlineColor={theme.colors.primary} /> : null}
+              <Image
+                source={{
+                  uri:
+                    pokemonById?.sprites.other.showdown.front_default ||
+                    pokemonById?.sprites.other["official-artwork"].front_default ||
+                    "",
+                }}
+                style={styles.image}
+                contentFit="contain"
+              />
+            </View>
+          </View>
 
-        <Image
-          source={{
-            uri:
-              pokemonById?.sprites.other.showdown.front_default ||
-              pokemonById?.sprites.other["official-artwork"].front_default ||
-              "",
-          }}
-          style={{
-            height: 200,
-            width: 200,
-          }}
-          contentFit="contain"
-        />
-        <WeaknessChartRenderer types={pokemonById?.types} />
+          <WeaknessChartRenderer types={pokemonById?.types} />
+        </View>
       </View>
     </ThemedView>
   );
 }
 
-function WeaknessChartRenderer({ types }: { types?: GetPokemonTypesResponse[] }) {
-  const {
-    data: { data: typeDamageInfo },
-  } = useGetPokemonTypesInfo({ types: types?.map((type) => ({ name: type.type.name })) ?? [] });
-
-  const damageMultiplier = groupBy(typeMultiplierAnalyzer(typeDamageInfo), (type) => {
-    switch (true) {
-      case type.multiplier > 2:
-        return "Highly Recommended";
-      case type.multiplier > 1:
-        return "Recommended";
-      case type.multiplier === 1:
-        return "Normal Damage";
-      default:
-      case type.multiplier < 1:
-        return "Do not use";
-    }
-  });
-
-  return (
-    <View
-      style={{
-        gap: 12,
-        paddingHorizontal: 24,
-        width: "100%",
-      }}
-    >
-      <View
-        style={{
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderColor: "red",
-          borderRadius: 50,
-          padding: 12,
-          width: "auto",
-        }}
-      >
-        <ThemedText
-          style={{
-            margin: "auto",
-            width: "auto",
-            fontSize: 16,
-            fontWeight: "bold",
-          }}
-        >
-          Attacker Analysis
-        </ThemedText>
-      </View>
-      <View
-        style={{
-          gap: 20,
-        }}
-      >
-        {Object.keys(damageMultiplier)
-          .filter((group) => group !== "Normal Damage")
-          .map((group) => (
-            <View key={group} style={{ alignItems: "flex-start", gap: 8 }}>
-              <ThemedText
-                style={{
-                  fontSize: 16,
-                  fontWeight: "bold",
-                  textAlign: "center",
-                }}
-              >
-                {group}:
-              </ThemedText>
-
-              <PokemonTypesRenderer
-                types={damageMultiplier[group as keyof typeof damageMultiplier].map((type, index) => ({
-                  slot: index,
-                  type: { name: type.name as GetPokemonTypesResponse["type"]["name"], url: "" },
-                }))}
-              />
-            </View>
-          ))}
-      </View>
-    </View>
-  );
-}
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 20,
+    height: 200,
+  },
+  imageContainer: {
+    position: "relative", // Crucial for absolute positioning of the line
+    width: "100%",
+    height: "100%", // Fixed or responsive
+    overflow: "hidden", // Optional: clips line if it goes slightly outside
+  },
+  image: {
+    height: "100%",
+    width: "100%",
+  },
+});
