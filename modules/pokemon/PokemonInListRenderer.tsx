@@ -5,15 +5,23 @@ import {
   useGetPokemonSpeciesById,
 } from "@/api/query/pokemon";
 import { BookmarkIcon } from "@/components/BookmarkIcon";
+import { RotatingBorder } from "@/components/rotating-border";
 import { useBookmarks } from "@/contexts/BookmarksContext";
+import { useAppSettings } from "@/contexts/SettingsContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, ColorValue, Pressable, Text, View } from "react-native";
 
 type PokemonInListRendererProps = {
   pokemon: { name: string };
 };
+
+const borderRadius = 24;
+const borderWidth = 6;
+const margin = borderWidth;
+const gradientColors = ["#00ffff", "#8a2be2", "#ff69b4", "#00ffff"] as [ColorValue, ColorValue, ...ColorValue[]];
+// const gradientColors = ["grey", "yellow", "salmon", "grey"] as [ColorValue, ColorValue, ...ColorValue[]];
 
 export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
   const { data: pokemonByName, isLoading } = useGetPokemonByName({ name: pokemon?.name });
@@ -23,6 +31,7 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
   const router = useRouter();
   const { bookmarks, toggleBookmark } = useBookmarks();
   const { theme } = useTheme();
+  const { enableRotatingBorder } = useAppSettings();
 
   function handleClick() {
     router.push(`/pokemon/${pokemonById?.id}`);
@@ -47,8 +56,15 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
   if (!pokemonByName) {
     return null;
   }
+
   return (
     <Pressable style={{ position: "relative" }} onPress={handleClick}>
+      <RotatingBorder
+        gradientColors={gradientColors}
+        borderRadius={borderRadius}
+        borderWidth={borderWidth}
+        enabled={isBookmarked && enableRotatingBorder}
+      />
       <View
         style={{
           position: "absolute",
@@ -57,8 +73,13 @@ export function PokemonInListRenderer({ pokemon }: PokemonInListRendererProps) {
           right: 0,
           bottom: 0,
           backgroundColor: pokemonSpecies?.color?.name || "white",
-          opacity: 0.3,
-          borderRadius: 36,
+          opacity: 0.4,
+          ...(isBookmarked && enableRotatingBorder
+            ? {
+                margin,
+                borderRadius: borderRadius - margin,
+              }
+            : { borderRadius }),
         }}
       />
       <View style={{ zIndex: 1, paddingVertical: 12, gap: 12 }}>

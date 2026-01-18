@@ -6,7 +6,7 @@ import { Switch, View } from "react-native";
 
 export default function Settings() {
   const { isDark, toggleTheme } = useTheme();
-  const { handleSetSettings, enableScanner } = useAppSettings();
+  const { handleSetSettings, enableScanner, enableRotatingBorder } = useAppSettings();
 
   return (
     <ThemedView
@@ -46,6 +46,25 @@ export default function Settings() {
           Enable scanner animation
         </ThemedText>
         <Switch onChange={() => handleSetSettings({ enableScanner: !enableScanner })} value={enableScanner} />
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <ThemedText
+          style={{
+            fontSize: 20,
+            maxWidth: "80%",
+          }}
+        >
+          Enable rotating border on bookmarked pokemons
+        </ThemedText>
+        <Switch
+          onChange={() => handleSetSettings({ enableRotatingBorder: !enableRotatingBorder })}
+          value={enableRotatingBorder}
+        />
       </View>
     </ThemedView>
   );

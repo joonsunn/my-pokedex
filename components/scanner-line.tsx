@@ -13,9 +13,11 @@ import Animated, {
 
 export const ScannerLine = ({
   scanlineColor = "orange",
+  durationMs = 3000,
   pauseAtEndMs = 100,
 }: {
   scanlineColor?: string;
+  durationMs?: number;
   pauseAtEndMs?: number;
 }) => {
   const animatedValue = useSharedValue(0);
@@ -25,12 +27,12 @@ export const ScannerLine = ({
 
     const sequence = withSequence(
       withTiming(100, {
-        duration: 3000,
+        duration: durationMs,
         easing: Easing.sin,
       }),
       withDelay(pauseAtEndMs, withTiming(100)), // Pause at bottom
       withTiming(0, {
-        duration: 3000,
+        duration: durationMs,
         easing: Easing.sin,
       }),
       withDelay(pauseAtEndMs, withTiming(0)), // Pause at top
@@ -41,7 +43,7 @@ export const ScannerLine = ({
 
     // Cleanup
     return () => cancelAnimation(animatedValue);
-  }, [animatedValue, pauseAtEndMs]);
+  }, [animatedValue, pauseAtEndMs, durationMs]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -64,10 +66,11 @@ const createStyle = (scanlineColor: string) =>
       opacity: 0.7,
       width: "100%",
       height: 4, // Thickness of the laser
-      //   zIndex: 1, // zIndex: 1 to make line be in front of image
-      shadowColor: scanlineColor || "orange",
-      shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: 1,
-      shadowRadius: 10,
+      // zIndex: 1, // zIndex: 1 to make line be in front of image
+      // shadowColor: scanlineColor || "orange",
+      // shadowOffset: { width: 0, height: 0 },
+      // shadowOpacity: 1,
+      // shadowRadius: 10, // shadow- props are only supported on iOS
+      boxShadow: `${scanlineColor} 0 0 16px 2px`, // supported by both iOS and Android
     },
   });

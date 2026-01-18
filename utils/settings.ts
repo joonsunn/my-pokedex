@@ -4,10 +4,12 @@ const SETTINGS_KEY = "SETTINGS";
 
 export type AppSettings = {
   enableScanner?: boolean;
+  enableRotatingBorder?: boolean;
 };
 
 const initialSettings = {
   enableScanner: true,
+  enableRotatingBorder: true,
 };
 
 export const setSavedSettings = async (setting: Record<string, any>): Promise<AppSettings> => {
