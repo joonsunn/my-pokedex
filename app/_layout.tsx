@@ -1,5 +1,6 @@
 import { TanstackQueryClientProvider } from "@/api/TanstackQueryClientProvider";
 import { BookmarksProvider } from "@/contexts/BookmarksContext";
+import { SettingsContextProvider } from "@/contexts/SettingsContext";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -7,13 +8,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export default function RootLayout() {
   return (
     <TanstackQueryClientProvider>
-      <ThemeProvider>
-        <SafeAreaProvider>
-          <BookmarksProvider>
-            <ThemedStack />
-          </BookmarksProvider>
-        </SafeAreaProvider>
-      </ThemeProvider>
+      <SettingsContextProvider>
+        <ThemeProvider>
+          <SafeAreaProvider>
+            <BookmarksProvider>
+              <ThemedStack />
+            </BookmarksProvider>
+          </SafeAreaProvider>
+        </ThemeProvider>
+      </SettingsContextProvider>
     </TanstackQueryClientProvider>
   );
 }

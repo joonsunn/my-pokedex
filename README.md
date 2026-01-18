@@ -25,3 +25,9 @@ cd android
 ```
 
 The build output will be located at `./android/app/build/apk/release`
+
+To clean build:
+
+```bash
+npx expo prebuild --platform android --clean
+```
