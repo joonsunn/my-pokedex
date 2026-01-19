@@ -1,32 +1,37 @@
 name: react-native-android-build-apk
+
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+
 jobs:
-  install-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Install npm dependencies
-        run: |
-          npm install
   build-android:
-    needs: install-and-test
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v6
+
       - name: Install npm dependencies
-        run: |
-          npm install
+        run: npm install
+
       - name: Generate Android native directory
-        run: |
-          npx expo prebuild --platform android
+        run: npx expo prebuild --platform android
+
       - name: Build Android Release
         run: |
-          cd android && ./gradlew assembleRelease
-      - name: Upload Artifact
+          cd android
+          ./gradlew assembleRelease
+
+      - name: Generate timestamp
+        id: ts
+        run: echo "value=$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
+
+      - name: Rename APK with timestamp
+        run: |
+          mv android/app/build/outputs/apk/release/app-release.apk \
+            android/app/build/outputs/apk/release/apk-${{ steps.ts.outputs.value }}.apk
+
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v6
         with:
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/
+          name: apk-${{ steps.ts.outputs.value }}
+          path: android/app/build/outputs/apk/release/apk-${{ steps.ts.outputs.value }}.apk
