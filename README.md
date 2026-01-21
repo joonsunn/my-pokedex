@@ -31,3 +31,7 @@ To clean build:
 ```bash
 npx expo prebuild --platform android --clean
 ```
+
+## Releases
+
+Periodic releases are available at the Releases section.
